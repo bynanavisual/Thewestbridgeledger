@@ -1,0 +1,712 @@
+<!doctype html><html lang="es"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Westbridge Ledger</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Archivo+Narrow:wght@500;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style id="app-css">/* Layout: asymmetrical front page. Nameplate with side "ears", a huge headline over a 3:2 photo and a narrow dek column, body in newspaper columns, then a narrow note beside a wide news list, a notice board, and a colophon. */
+:root {
+  --paper: #ebdfc2;
+  --card: #f3ead2;
+  --ink: #3b2616;
+  --ink-2: #6a4f38;
+  --faint: #8a7255;
+  --rule-soft: rgba(59, 38, 22, .32);
+  --accent: #9c3d24;
+  --shadow: rgba(59, 38, 22, .28);
+  --vig: rgba(96, 62, 28, .2);
+  --grain-op: .55;
+  --grain-blend: multiply;
+  --img-filter: sepia(.72) contrast(1.06) saturate(.85) brightness(.97);
+  --f-display: 'Abril Fatface', 'Playfair Display', Georgia, serif;
+  --f-head: 'Old Standard TT', 'Times New Roman', Georgia, serif;
+  --f-body: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --f-label: 'Archivo Narrow', 'Arial Narrow', Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1d140d; --card: #271b12; --ink: #ecdfbf; --ink-2: #c3ad88; --faint: #9a8566;
+    --rule-soft: rgba(236, 223, 191, .3); --accent: #e08a5f; --shadow: rgba(0, 0, 0, .55);
+    --vig: rgba(0, 0, 0, .4); --grain-op: .1; --grain-blend: screen;
+    --img-filter: sepia(.7) contrast(1.02) saturate(.8) brightness(.82);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1d140d; --card: #271b12; --ink: #ecdfbf; --ink-2: #c3ad88; --faint: #9a8566;
+  --rule-soft: rgba(236, 223, 191, .3); --accent: #e08a5f; --shadow: rgba(0, 0, 0, .55);
+  --vig: rgba(0, 0, 0, .4); --grain-op: .1; --grain-blend: screen;
+  --img-filter: sepia(.7) contrast(1.02) saturate(.8) brightness(.82);
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 400 1.02rem/1.6 var(--f-body); -webkit-font-smoothing: antialiased; }
+body::before {
+  content: ''; position: fixed; inset: 0; z-index: 60; pointer-events: none; opacity: var(--grain-op); mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .24 0 0 0 0 .15 0 0 0 0 .08 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 59; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 38%, transparent 52%, var(--vig) 100%);
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: clamp(16px, 3vw, 32px); }
+.lbl { font: 600 .74rem/1.2 var(--f-label); letter-spacing: .14em; text-transform: uppercase; }
+
+/* top strip + nameplate */
+.strip { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .4rem 1rem; padding-block: .6rem; color: var(--ink-2); }
+.strip .desk-open { background: none; border: 1px solid var(--ink); padding: .2rem .6rem; color: var(--ink); }
+.strip .desk-open:hover { background: var(--ink); color: var(--paper); }
+.mast { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 1rem; padding-block: 1.1rem .7rem; }
+.nameplate { margin: 0; text-align: center; font: 400 clamp(1.3rem, 5.6vw, 2.6rem)/1 var(--f-display); letter-spacing: .01em; text-wrap: balance; }
+.ear { border: 1px solid var(--ink); padding: .45rem .6rem; text-align: center; max-width: 9rem; color: var(--ink-2); line-height: 1.35; }
+.ear b { display: block; font: 700 1.2rem/1.1 var(--f-head); color: var(--ink); letter-spacing: 0; text-transform: none; }
+.ear.l { justify-self: start; transform: rotate(-1.2deg); }
+.ear.r { justify-self: end; transform: rotate(.9deg); }
+.tag { display: flex; align-items: center; gap: .9rem; padding-bottom: .8rem; }
+.tag::before, .tag::after { content: ''; flex: 1; height: 1px; background: var(--ink); opacity: .6; }
+.tag p { margin: 0; font: italic 400 1.08rem/1.3 var(--f-head); text-align: center; color: var(--ink-2); }
+.rule2 { height: 6px; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); }
+.nav { display: flex; flex-wrap: wrap; border-bottom: 1px solid var(--ink); }
+.nav button { background: none; border: 0; border-inline-start: 1px solid var(--rule-soft); padding: .6rem .95rem; font: 600 .8rem/1.1 var(--f-label); letter-spacing: .13em; text-transform: uppercase; }
+.nav button:first-child { border-inline-start: 0; padding-inline-start: 0; }
+.nav button:hover { text-decoration: underline; text-underline-offset: 4px; }
+.nav button[aria-current="true"] { background: var(--ink); color: var(--paper); border-inline-start-color: transparent; }
+.nav button:first-child[aria-current="true"] { padding-inline-start: .95rem; }
+
+/* featured story */
+.story { padding-block: 1.6rem 1.2rem; }
+.story-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem 1rem; color: var(--ink-2); }
+.stamp { display: inline-block; border: 2px solid var(--accent); color: var(--accent); padding: .12rem .55rem; font-weight: 700; transform: rotate(-2deg); }
+.back { background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; color: var(--ink); }
+.story-h { margin: .6rem 0 1.4rem; font: 700 clamp(2rem, 6.4vw, 5.2rem)/.98 var(--f-head); letter-spacing: -.012em; text-transform: uppercase; text-wrap: balance; }
+.story-grid { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); gap: 1.6rem 2.4rem; align-items: start; }
+.story-grid.nophoto { grid-template-columns: minmax(0, 1fr); }
+.plate { margin: 0; }
+.plate .frame { border: 1px solid var(--ink); padding: 6px; background: var(--card); box-shadow: 3px 4px 0 var(--shadow); }
+.plate .ph { aspect-ratio: 3 / 2; overflow: hidden; background: var(--paper); }
+.plate .ph svg, .plate .ph img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.plate .ph img { filter: var(--img-filter); }
+.plate figcaption { margin-top: .55rem; font: italic 400 .86rem/1.4 var(--f-body); color: var(--ink-2); }
+.plate figcaption .cr { display: block; font: 600 .68rem/1.4 var(--f-label); letter-spacing: .14em; text-transform: uppercase; font-style: normal; color: var(--faint); }
+.tilt-a { transform: rotate(-.7deg); } .tilt-b { transform: rotate(.6deg); } .tilt-c { transform: rotate(-.3deg); }
+.story-side { border-top: 3px solid var(--ink); padding-top: .9rem; display: grid; gap: 1rem; }
+.dek { margin: 0; font: italic 400 clamp(1.2rem, 2.2vw, 1.6rem)/1.32 var(--f-head); text-wrap: pretty; }
+.byline { margin: 0; display: flex; flex-wrap: wrap; gap: .2rem .8rem; color: var(--ink-2); border-block: 1px solid var(--rule-soft); padding-block: .6rem; }
+.byline b { color: var(--ink); }
+.share { color: var(--ink); text-underline-offset: 3px; }
+.story-body { margin-top: 1.8rem; columns: 3 18rem; column-gap: 2.4rem; column-rule: 1px solid var(--rule-soft); }
+.story-body p { margin: 0 0 1rem; text-wrap: pretty; }
+.story-body > p:first-of-type::first-letter { float: left; font: 700 3.6em/.78 var(--f-head); padding: .07em .09em 0 0; }
+.pull { margin: .4rem 0 1.2rem; padding: .6rem 0; border-block: 2px solid var(--ink); font: italic 400 1.4rem/1.3 var(--f-head); break-inside: avoid; }
+
+/* section headings + lower grid */
+.sec-h { display: flex; flex-wrap: wrap; align-items: baseline; gap: .2rem .9rem; border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink); padding: .4rem 0; margin: 0 0 1.1rem; }
+.sec-h h2 { margin: 0; font: 700 1.35rem/1.1 var(--f-head); letter-spacing: .07em; text-transform: uppercase; }
+.sec-h .lbl { color: var(--ink-2); }
+.lower { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 2rem 2.8rem; padding-block: 1.6rem; align-items: start; }
+.note { background: var(--card); border: 1px dashed var(--ink); padding: 1.1rem 1.1rem 1.2rem; transform: rotate(-.8deg); box-shadow: 3px 4px 0 var(--shadow); }
+.note h3 { margin: 0 0 .5rem; font: 700 1.5rem/1.1 var(--f-head); text-wrap: balance; }
+.note p { margin: 0; color: var(--ink-2); }
+.note .lbl { display: block; margin-bottom: .6rem; color: var(--accent); }
+.list { list-style: none; margin: 0; padding: 0; }
+.item { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: 1rem; padding-block: 1rem; border-top: 1px solid var(--rule-soft); }
+.item:first-child { border-top: 0; padding-top: 0; }
+.item.nothumb { grid-template-columns: minmax(0, 1fr); }
+.item .plate .frame { padding: 4px; box-shadow: none; }
+.item .plate .ph { aspect-ratio: 4 / 3; }
+.meta { margin: 0 0 .3rem; color: var(--ink-2); }
+.meta .cat { color: var(--accent); font-weight: 700; }
+.item h3 { margin: 0 0 .3rem; font: 700 1.35rem/1.15 var(--f-head); text-wrap: balance; }
+.item h3 button { background: none; border: 0; padding: 0; text-align: left; font: inherit; color: inherit; }
+.item h3 button:hover { text-decoration: underline; text-underline-offset: 4px; }
+.item .sum { margin: 0; color: var(--ink-2); }
+.here { font: 700 .66rem/1 var(--f-label); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--ink); padding: .12rem .35rem; margin-left: .5rem; vertical-align: middle; }
+.empty { margin: 0; padding: 1rem 0; font: italic 400 1.15rem/1.4 var(--f-head); color: var(--ink-2); }
+
+/* community */
+.community { padding-block: 1rem 1.8rem; }
+.board { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: 1.6rem; padding: .6rem 0 1.6rem; }
+.pin { position: relative; background: var(--card); border: 1px solid var(--ink); padding: 1.3rem 1rem 1.1rem; box-shadow: 3px 4px 0 var(--shadow); font: italic 400 1.1rem/1.4 var(--f-head); }
+.pin::before { content: ''; position: absolute; top: -7px; left: 50%; width: 13px; height: 13px; margin-left: -6px; border-radius: 50%; background: var(--accent); box-shadow: 1px 2px 0 var(--shadow); }
+.pin:nth-child(3n+1) { transform: rotate(-1.3deg); } .pin:nth-child(3n+2) { transform: rotate(.9deg) translateY(6px); } .pin:nth-child(3n) { transform: rotate(-.4deg); }
+.rincones { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 1.4rem; }
+.rincones .plate:nth-child(4n+1) { transform: rotate(-.8deg); } .rincones .plate:nth-child(4n+2) { transform: rotate(.7deg) translateY(8px); } .rincones .plate:nth-child(4n+3) { transform: rotate(-.4deg); } .rincones .plate:nth-child(4n) { transform: rotate(.9deg) translateY(4px); }
+.rincones .plate .frame { padding: 4px; }
+.cap-note { margin: 0 0 1rem; color: var(--ink-2); font: italic 400 .95rem/1.4 var(--f-body); }
+
+/* about + footer */
+.about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 2rem 3rem; padding-block: 1rem 2rem; align-items: center; }
+.about h2 { margin: 0 0 .8rem; font: 700 clamp(1.7rem, 3.4vw, 2.6rem)/1.08 var(--f-head); text-wrap: balance; }
+.about p { margin: 0 0 1rem; max-width: 62ch; }
+.contact { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1rem; border-top: 1px solid var(--rule-soft); padding-top: .9rem; }
+.contact code { font: 600 1rem/1.2 var(--f-label); letter-spacing: .04em; user-select: all; }
+.btn { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); padding: .5rem 1rem; font: 700 .8rem/1 var(--f-label); letter-spacing: .13em; text-transform: uppercase; }
+.btn:hover { background: var(--accent); border-color: var(--accent); color: var(--paper); }
+.btn.ghost { background: transparent; color: var(--ink); }
+.btn.ghost:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn.sm { padding: .32rem .6rem; font-size: .72rem; }
+.foot { border-top: 3px solid var(--ink); padding-block: 1.1rem 2.4rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .6rem 1.4rem; color: var(--ink-2); }
+.foot a { color: var(--ink); text-underline-offset: 3px; }
+
+/* editor desk */
+.desk { position: fixed; inset: 0; z-index: 70; overflow: auto; background: var(--paper); padding: calc(1rem + env(safe-area-inset-top, 0px)) 0 calc(2rem + env(safe-area-inset-bottom, 0px)); }
+.desk-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .8rem 1rem; border-bottom: 3px double var(--ink); padding-bottom: .8rem; margin-bottom: 1.2rem; }
+.desk-top h2 { margin: 0; font: 400 2rem/1 var(--f-display); }
+.desk-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem; }
+#pubmsg { font: 600 .8rem/1.3 var(--f-label); letter-spacing: .06em; color: var(--ink-2); max-width: 22rem; }
+#pubmsg.err { color: var(--accent); }
+.dtabs { display: flex; gap: .4rem; margin-bottom: 1rem; }
+.dtabs button { background: none; border: 1px solid var(--ink); padding: .4rem .9rem; font: 700 .78rem/1 var(--f-label); letter-spacing: .13em; text-transform: uppercase; }
+.dtabs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.dgrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.7fr); gap: 1.6rem 2.4rem; align-items: start; }
+.dlist { list-style: none; margin: 0 0 1rem; padding: 0; display: grid; gap: .6rem; }
+.dlist li { border: 1px solid var(--rule-soft); background: var(--card); padding: .7rem; display: grid; gap: .45rem; }
+.dlist b { font: 700 1.05rem/1.2 var(--f-head); }
+.dlist .row { display: flex; flex-wrap: wrap; gap: .4rem; align-items: center; }
+.dform { display: grid; gap: .9rem; }
+.dform label, .field { display: grid; gap: .3rem; font: 700 .72rem/1.2 var(--f-label); letter-spacing: .13em; text-transform: uppercase; color: var(--ink-2); }
+.dform input[type="text"], .dform input[type="date"], .dform input[type="email"], .dform input[type="password"], .dform select, .dform textarea {
+  width: 100%; min-width: 0; border: 1px solid var(--ink); background: var(--card); color: var(--ink); padding: .55rem .6rem; border-radius: 0; font: 400 1rem/1.45 var(--f-body); letter-spacing: 0; text-transform: none;
+}
+.dform textarea { resize: vertical; }
+.d2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .9rem; }
+.chk { display: flex !important; align-items: center; gap: .5rem; text-transform: none !important; letter-spacing: 0 !important; font: 400 1rem/1.3 var(--f-body) !important; color: var(--ink) !important; }
+.help { font: italic 400 .85rem/1.4 var(--f-body); color: var(--faint); text-transform: none; letter-spacing: 0; }
+.prev { max-width: 14rem; }
+.drow { display: flex; flex-wrap: wrap; gap: .6rem; }
+
+@media (min-width: 821px) { .nameplate { font-size: min(3.4rem, 3.9vw); } }
+@media (max-width: 820px) {
+  .mast { grid-template-columns: minmax(0, 1fr); }
+  .ear { display: none; }
+  .story-grid, .lower, .about, .dgrid { grid-template-columns: minmax(0, 1fr); }
+  .item { grid-template-columns: 6rem minmax(0, 1fr); gap: .8rem; }
+  .note { transform: none; }
+  .nav button { padding-inline: .7rem; }
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+<div id="root"></div>
+<div id="desk" class="desk" hidden></div>
+<script type="application/json" id="site-data">{"site":{"volume":"Vol. 1","issue":"N.º 003","editionDate":"","tagline":"Noticias locales. Una mirada de cerca a Westbridge.","motto":"Una ciudad imaginaria, un espíritu local.","noteTitle":"Esta es nuestra primera página.","noteText":"Todavía no hay noticias nuevas. Por ahora solo queremos darte la bienvenida a Westbridge. Vuelve pronto: aquí irán apareciendo las historias de la ciudad.","aboutTitle":"Un pequeño periódico. Una ciudad que merece atención.","aboutText":"Somos un equipo independiente de cinco personas. Trabajamos desde una redacción sobre una librería de Mill Street, sin grandes propietarios detrás.","boardNotes":["¿Organizas algo en tu barrio? Cuéntanoslo y lo anunciaremos aquí.","¿Conoces a alguien con una historia que contar? Escribe a la redacción.","Los eventos, los vecinos y los relatos de Westbridge irán apareciendo en esta página."],"email":"thewbledger@gmail.com","address":"14 Mill Street, Westbridge"},"articles":[{"id":"a-apertura","title":"The Westbridge Ledger abre sus puertas a la ciudad","dek":"Nace un periódico independiente para contar lo que pasa en las calles, las plazas y los barrios de Westbridge.","body":"Westbridge tiene desde hoy un periódico propio. The Westbridge Ledger llega como una publicación independiente, pensada para quien vive en la ciudad y quiere saber qué ocurre a su alrededor.\n\nEl diario cubrirá la actualidad municipal, los sucesos, la cultura, la vida comunitaria y las noticias generales del día a día. La intención es que ningún rincón de la ciudad se quede sin ser contado.\n\n> Información clara y al alcance de todos los vecinos.\n\nParte de ese trabajo serán las entrevistas con vecinos y con figuras locales, para que las historias de Westbridge las cuenten quienes las viven. El objetivo es ofrecer una información accesible, escrita con cercanía y sin tecnicismos.\n\nThe Westbridge Ledger estará disponible en papel y en línea. La primera edición llegará muy pronto a los puntos de distribución de la ciudad y a los canales digitales del periódico.","cat":"Noticias locales","author":"La redacción","date":"2026-10-12","img":"","scene":"hall","caption":"La plaza del Ayuntamiento, el corazón de Westbridge.","credit":"Ilustración de archivo","flash":true,"featured":true}]}</script>
+<script id="app-js">/* ---------- Illustrated "photographs" of Westbridge (SVG, drawn in code) ---------- */
+const C = { sky0: '#a08558', sky1: '#dac9a4', sky2: '#f0e5ca', haze: '#cdb98f', far: '#b8a077', mid: '#8d714f', near: '#5c452f', dark: '#2f2116', lite: '#f4ebd2', water: '#a99169', water2: '#d0bc92' };
+const f1 = n => Math.round(n * 10) / 10;
+function rng(seed) { let a = (Math.imul(seed | 0, 2654435761) >>> 0) || 1; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = (t + Math.imul(t ^ t >>> 7, 61 | t)) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const op = o => o == null ? '' : ` opacity="${o}"`;
+const R = (x, y, w, h, c, o) => `<rect x="${f1(x)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" fill="${c}"${op(o)}/>`;
+const Pa = (d, c, o) => `<path d="${d}" fill="${c}"${op(o)}/>`;
+const Ci = (x, y, r, c, o) => `<circle cx="${f1(x)}" cy="${f1(y)}" r="${f1(r)}" fill="${c}"${op(o)}/>`;
+const Ln = (x1, y1, x2, y2, c, w, o) => `<line x1="${f1(x1)}" y1="${f1(y1)}" x2="${f1(x2)}" y2="${f1(y2)}" stroke="${c}" stroke-width="${w}"${o == null ? '' : ` stroke-opacity="${o}"`}/>`;
+const Pe = (x, y, s, c, hat) => `<g transform="translate(${f1(x)} ${f1(y)}) scale(${f1(s)})" fill="${c}"><circle cy="-35" r="4.6"/>${hat ? '<rect x="-7" y="-40.5" width="14" height="2.2"/><rect x="-4.6" y="-45.5" width="9.2" height="6"/>' : ''}<path d="M-6.5-29q6.5-3.5 13 0l2.5 17h-4.4l-.6 12h-8l-.6-12h-4.4z"/></g>`;
+
+function skyBg(id, sx, sy) {
+  return `<defs><linearGradient id="${id}s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.sky0}"/><stop offset=".5" stop-color="${C.sky1}"/><stop offset="1" stop-color="${C.sky2}"/></linearGradient>`
+    + `<radialGradient id="${id}g" cx="${sx}" cy="${sy}" r=".55"><stop offset="0" stop-color="#fff8e4" stop-opacity=".9"/><stop offset="1" stop-color="#fff8e4" stop-opacity="0"/></radialGradient>`
+    + `<linearGradient id="${id}w" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.water2}"/><stop offset="1" stop-color="${C.water}"/></linearGradient>`
+    + `<linearGradient id="${id}f" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.mid}"/><stop offset="1" stop-color="${C.near}"/></linearGradient></defs>`
+    + `<rect width="800" height="520" fill="url(#${id}s)"/><rect width="800" height="520" fill="url(#${id}g)"/>`;
+}
+function clouds(r, n, y0, y1) { let s = ''; for (let i = 0; i < n; i++) { const w = 70 + r() * 150; s += `<ellipse cx="${f1(r() * 800)}" cy="${f1(y0 + r() * (y1 - y0))}" rx="${f1(w)}" ry="${f1(w * .11)}" fill="${C.lite}" opacity="${f1(.16 + r() * .22)}"/>`; } return s; }
+function hills(r, y, col, amp, o) { let d = `M0 ${y}`; for (let x = 0; x <= 800; x += 40) d += `L${x} ${f1(y - r() * amp)}`; return Pa(d + 'L800 520L0 520Z', col, o); }
+function houses(r, x0, x1, base, col, hmin, hmax) {
+  let s = '';
+  for (let x = x0; x < x1;) {
+    const w = 22 + r() * 34, h = hmin + r() * (hmax - hmin);
+    s += R(x, base - h, w, h + 2, col);
+    if (r() < .62) s += Pa(`M${f1(x - 2)} ${f1(base - h)}L${f1(x + w / 2)} ${f1(base - h - 8 - r() * 12)}L${f1(x + w + 2)} ${f1(base - h)}Z`, col);
+    if (r() < .35) s += R(x + w * .6, base - h - 20 - r() * 8, 5, 18, col);
+    x += w + (r() < .3 ? 4 : 0);
+  }
+  return s;
+}
+function wins(r, x, y, cols, rows, w, h, gx, gy, col, lit) {
+  let s = '';
+  for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) s += R(x + i * gx, y + j * gy, w, h, r() < (lit || 0) ? C.lite : col, r() < (lit || 0) ? .75 : .85);
+  return s;
+}
+function bunting(r, x1, x2, y, sag, n, col) {
+  let s = `<path d="M${x1} ${y}Q${(x1 + x2) / 2} ${y + sag} ${x2} ${y}" fill="none" stroke="${C.dark}" stroke-width="1.2" stroke-opacity=".7"/>`;
+  for (let i = 1; i < n; i++) { const t = i / n, x = x1 + (x2 - x1) * t, yy = y + 2 * sag * t * (1 - t) * 1; s += Pa(`M${f1(x - 6)} ${f1(yy)}L${f1(x + 6)} ${f1(yy)}L${f1(x)} ${f1(yy + 13)}Z`, i % 2 ? col : C.lite, .9); }
+  return s;
+}
+function crowd(r, n, x0, x1, y0, y1, col) {
+  const list = [];
+  for (let i = 0; i < n; i++) list.push([x0 + r() * (x1 - x0), y0 + r() * (y1 - y0), r() < .35]);
+  list.sort((a, b) => a[1] - b[1]);
+  return list.map(p => Pe(p[0], p[1], .55 + (p[1] - y0) / (y1 - y0) * .75, col, p[2])).join('');
+}
+function cobbles(r, y0, y1) { let s = ''; for (let y = y0; y < y1; y += 8) { s += R(0, y, 800, 1, C.dark, .22); for (let x = (y / 8 % 2) * 10; x < 800; x += 20 + r() * 8) s += R(x, y, 1, 8, C.dark, .18); } return s; }
+function reeds(r, x0, x1, n, h) { let s = ''; for (let i = 0; i < n; i++) { const x = x0 + r() * (x1 - x0), hh = h * (.5 + r() * .8); s += Pa(`M${f1(x)} 520L${f1(x + (r() - .5) * 14)} ${f1(520 - hh)}L${f1(x + 4)} 520Z`, C.dark, .92); } return s; }
+
+const SCENES = {
+  bridge(r, id) {
+    let s = skyBg(id, .74, .46) + clouds(r, 7, 30, 190) + hills(r, 325, C.haze, 30, .85) + houses(r, -10, 820, 352, C.far, 24, 74);
+    s += R(612, 205, 28, 150, C.far) + Pa('M608 205L626 176L644 205Z', C.far) + Ci(626, 228, 7.5, C.lite, .75) + Ln(626, 228, 626, 222, C.dark, 1) + Ln(626, 228, 631, 228, C.dark, 1);
+    s += `<rect y="356" width="800" height="164" fill="url(#${id}w)"/>`;
+    for (let i = 0; i < 26; i++) s += R(r() * 760, 364 + r() * 150, 20 + r() * 90, 1.6, C.lite, f1(.25 + r() * .3));
+    s += R(0, 300, 800, 72, C.mid);
+    for (let y = 308; y < 372; y += 11) s += R(0, y, 800, 1, C.dark, .2);
+    for (let i = 0; i < 70; i++) s += R(r() * 800, 308 + Math.floor(r() * 6) * 11, 1, 10, C.dark, .18);
+    for (const x of [120, 330, 540, 750]) {
+      s += Pa(`M${x - 72} 372V346A72 72 0 0 1 ${x + 72} 346V372Z`, C.haze) + R(x - 72, 358, 144, 14, `url(#${id}w)`)
+        + `<path d="M${x - 72} 346A72 72 0 0 1 ${x + 72} 346" fill="none" stroke="${C.dark}" stroke-width="6" stroke-opacity=".45"/>`
+        + R(x - 72, 372, 144, 8, C.dark, .28);
+    }
+    s += R(0, 280, 800, 21, C.near) + R(0, 276, 800, 5, C.lite, .5);
+    for (const x of [70, 260, 470, 690]) s += R(x, 226, 3, 54, C.dark) + Pa(`M${x - 5} 226h13l-3 -13h-7z`, C.dark) + Ci(x + 1.5, 220, 16, C.lite, .22);
+    for (let i = 0; i < 5; i++) s += Pa(`M${22 + i * 22} 280l16-42h8l-16 42z`, C.lite, .6);
+    s += R(18, 236, 110, 5, C.dark) + R(24, 238, 3, 42, C.dark) + R(118, 238, 3, 42, C.dark);
+    s += Pe(310, 280, .95, C.dark, true) + Pe(334, 280, .9, C.dark) + Pe(480, 280, 1, C.dark, true) + Pe(572, 280, .85, C.dark);
+    s += Pa('M520 452q44 24 96 0l-9 11q-40 14-78 0z', C.dark) + Ln(566, 452, 566, 418, C.dark, 2) + Pe(566, 452, .7, C.dark, true);
+    s += Pa('M0 520V478Q70 448 140 478T270 520Z', C.dark) + reeds(r, 0, 150, 30, 70) + reeds(r, 650, 800, 40, 80) + Pa('M800 520V470Q740 446 690 480T610 520Z', C.dark);
+    return s;
+  },
+  hall(r, id, o) {
+    o = o || {};
+    let s = skyBg(id, .3, .4) + clouds(r, 6, 30, 170) + hills(r, 350, C.haze, 28, .8) + houses(r, -10, 250, 410, C.far, 70, 160) + houses(r, 550, 820, 410, C.far, 70, 160);
+    s += `<rect y="400" width="800" height="120" fill="url(#${id}f)"/>` + cobbles(r, 404, 520);
+    s += R(250, 232, 300, 172, C.mid) + Pa('M236 236L400 178L564 236Z', C.near) + R(250, 228, 300, 9, C.near);
+    if (o.clock !== false) {
+      s += R(372, 90, 56, 148, C.mid) + R(366, 84, 68, 8, C.near) + Pa('M370 84L400 30L430 84Z', C.near) + R(399, 12, 2, 20, C.dark) + Pa('M401 12l22 6-22 6z', C.dark);
+      s += Ci(400, 136, 19, C.lite, .85) + Ci(400, 136, 19, 'none') + Ln(400, 136, 400, 122, C.dark, 2) + Ln(400, 136, 410, 140, C.dark, 2) + R(386, 178, 28, 34, C.dark, .8) + R(386, 108, 28, 3, C.near);
+    }
+    for (let i = 0; i < 6; i++) s += R(268 + i * 46, 262, 14, 142, C.far, .92) + R(264 + i * 46, 258, 22, 6, C.near, .7);
+    s += wins(r, 276, 276, 5, 1, 12, 34, 46, 0, C.dark, .12);
+    s += Pa('M370 404V348Q400 318 430 348V404Z', C.dark);
+    for (let i = 0; i < 4; i++) s += R(340 - i * 10, 404 + i * 6, 120 + i * 20, 6, i % 2 ? C.near : C.mid, .95);
+    if (o.flags !== false) s += bunting(r, 40, 360, 192, 36, 12, C.near) + bunting(r, 440, 780, 192, 36, 12, C.near);
+    s += crowd(r, o.crowd || 26, 150, 660, 436, 506, C.dark);
+    s += R(60, 150, 3, 260, C.dark) + R(740, 150, 3, 260, C.dark) + Ci(61, 146, 11, C.lite, .35) + Ci(741, 146, 11, C.lite, .35);
+    return s;
+  },
+  market(r, id) {
+    let s = skyBg(id, .62, .35) + clouds(r, 6, 20, 150);
+    s += Pa('M560 330V120l14-52 14 52V330Z', C.far) + Pa('M568 120h12v14h-12z', C.lite, .6) + houses(r, -10, 540, 330, C.far, 80, 190) + houses(r, 610, 820, 330, C.far, 80, 170);
+    for (let i = 0; i < 18; i++) s += wins(r, 10 + i * 44, 200 + r() * 30, 1, 2, 9, 16, 0, 34, C.near, .1);
+    s += `<rect y="330" width="800" height="190" fill="url(#${id}f)"/>` + cobbles(r, 336, 520);
+    s += bunting(r, 0, 420, 150, 50, 14, C.near) + bunting(r, 400, 800, 150, 50, 14, C.near);
+    const xs = [30, 230, 430, 620];
+    xs.forEach((x, i) => {
+      const w = 150, y = 270 + (i % 2) * 14;
+      for (let k = 0; k < 8; k++) s += Pa(`M${x + k * w / 8} ${y}h${w / 8}l${(k - 3.5) * 2.2} 34h${-w / 8}z`, k % 2 ? C.lite : C.dark, k % 2 ? .92 : .85);
+      s += Pa(`M${x} ${y}h${w}l8 -34h${-w - 16}z`, C.near, .9) + R(x + 6, y + 34, 3, 80, C.dark) + R(x + w - 9, y + 34, 3, 80, C.dark) + R(x + 6, y + 80, w - 12, 36, C.near);
+      for (let k = 0; k < 9; k++) s += Ci(x + 16 + k * 15, y + 76, 6, i % 2 ? C.lite : C.far, .95) + Ci(x + 16 + k * 15, y + 76, 2, C.dark, .2);
+    });
+    s += crowd(r, 30, 20, 780, 410, 510, C.dark);
+    for (let i = 0; i < 5; i++) s += R(20 + i * 150 + r() * 60, 488 + r() * 20, 40, 24, C.near) + R(24 + i * 150, 482, 32, 6, C.dark, .6);
+    return s;
+  },
+  street(r, id, o) {
+    o = o || {};
+    let s = skyBg(id, .5, .3) + clouds(r, 5, 20, 120) + hills(r, 300, C.haze, 24, .7);
+    const bx = [0, 190, 400, 590];
+    bx.forEach((x, i) => {
+      const w = i === 1 ? 210 : 195, h = 230 + (i % 2) * 40, top = 380 - h;
+      s += R(x, top, w, h + 20, i % 2 ? C.far : C.mid) + R(x - 4, top - 6, w + 8, 10, C.near) + wins(r, x + 14, top + 24, 4, 2, 24, 34, w / 4.2, 52, C.dark, .15);
+      s += R(x + 8, 304, w - 16, 76, C.near) + R(x + 18, 316, w - 70, 64, C.lite, .35) + R(x + w - 44, 316, 30, 64, C.dark, .8);
+      for (let k = 0; k < 9; k++) s += Pa(`M${x + 8 + k * (w - 16) / 9} 304h${(w - 16) / 9}l-2 16h${-(w - 16) / 9 + 4}z`, k % 2 ? C.lite : C.dark, .8);
+    });
+    const mx = 190; s += R(mx + 16, 262, 178, 36, C.dark) + R(mx + 20, 266, 170, 28, C.lite, .85);
+    s += `<text x="${mx + 105}" y="288" text-anchor="middle" font-family="Old Standard TT, Georgia, serif" font-weight="700" font-size="24" letter-spacing="4" fill="${C.dark}">${esc(o.label || 'PALACE')}</text>`;
+    for (let i = 0; i < 17; i++) s += Ci(mx + 22 + i * 10.4, 264, 2, C.lite) + Ci(mx + 22 + i * 10.4, 296, 2, C.lite);
+    s += `<rect y="380" width="800" height="140" fill="url(#${id}f)"/>` + cobbles(r, 384, 520);
+    s += R(40, 156, 3, 230, C.dark) + R(756, 160, 3, 226, C.dark) + Ci(41, 150, 13, C.lite, .35) + Ci(757, 154, 13, C.lite, .35);
+    s += Ln(0, 112, 800, 128, C.dark, 1.2, .7) + Ln(0, 118, 800, 134, C.dark, 1.2, .7);
+    s += Pa('M520 470q8-26 38-28l30-14h66q26 4 30 30l10 12v12H500z', C.dark) + Ci(552, 488, 14, C.near) + Ci(660, 488, 14, C.near) + Ci(552, 488, 6, C.lite, .5) + Ci(660, 488, 6, C.lite, .5) + R(582, 436, 42, 14, C.far, .7);
+    s += crowd(r, 14, 80, 480, 424, 506, C.dark);
+    return s;
+  },
+  mill(r, id) {
+    let s = skyBg(id, .2, .38) + clouds(r, 7, 20, 170) + hills(r, 300, C.haze, 34, .85);
+    s += R(300, 120, 280, 230, C.near) + Pa('M290 124L440 70L590 124Z', C.dark) + R(580, 40, 34, 310, C.near) + R(574, 34, 46, 10, C.dark);
+    for (let j = 0; j < 4; j++) s += wins(r, 316, 150 + j * 52, 8, 1, 17, 30, 32, 0, C.dark, .18);
+    s += R(300, 326, 280, 24, C.dark, .6) + R(430, 280, 36, 70, C.dark);
+    for (let i = 0; i < 4; i++) s += `<ellipse cx="${f1(610 + i * 24)}" cy="${f1(24 - i * 8 + (i % 2) * 4)}" rx="${f1(30 + i * 12)}" ry="${f1(10 + i * 3)}" fill="${C.lite}" opacity="${f1(.5 - i * .1)}"/>`;
+    s += houses(r, -10, 290, 350, C.far, 40, 95) + houses(r, 610, 820, 350, C.far, 40, 105);
+    s += `<rect y="350" width="800" height="170" fill="url(#${id}w)"/>`;
+    s += R(0, 396, 800, 22, C.lite, .7) + R(0, 418, 800, 8, C.dark, .35);
+    for (let i = 0; i < 60; i++) s += R(r() * 780, 398 + r() * 18, 14 + r() * 60, 1.6, C.dark, f1(.12 + r() * .18));
+    for (let i = 0; i < 24; i++) s += R(r() * 780, 430 + r() * 80, 20 + r() * 80, 1.8, C.lite, f1(.25 + r() * .3));
+    s += R(0, 392, 800, 7, C.near) + Pa('M0 392h800l-20 -10h-760z', C.mid);
+    s += Pa('M60 470q42 24 98 0l-10 11q-42 14-78 0z', C.dark) + Pe(110, 470, .8, C.dark, true);
+    s += Pa('M0 520V486Q80 462 150 492T290 520Z', C.dark) + reeds(r, 0, 180, 34, 80) + Pa('M800 520V490Q730 458 660 492T560 520Z', C.dark) + reeds(r, 620, 800, 40, 90);
+    return s;
+  },
+  shop(r, id, o) {
+    o = o || {};
+    const bread = o.kind === 'bread', sign = (o.label || 'R. ADEYEMI · CLOCKS & WATCHES').toUpperCase();
+    let s = skyBg(id, .5, .2) + `<rect y="0" width="800" height="520" fill="${C.far}" opacity=".35"/>`;
+    s += R(90, 30, 620, 490, C.mid) + R(90, 30, 620, 10, C.near);
+    for (let y = 44; y < 520; y += 14) s += R(90, y, 620, 1, C.dark, .16);
+    s += wins(r, 130, 54, 6, 1, 70, 78, 100, 0, C.dark, .0);
+    s += R(110, 150, 580, 56, C.dark) + R(118, 156, 564, 44, C.near);
+    s += `<text x="400" y="187" text-anchor="middle" font-family="Old Standard TT, Georgia, serif" font-weight="700" font-size="${sign.length > 24 ? 27 : 33}" letter-spacing="3" fill="${C.lite}" fill-opacity=".92">${esc(sign)}</text>`;
+    for (let k = 0; k < 20; k++) s += Pa(`M${110 + k * 29} 206h29l-3 24h-23z`, k % 2 ? C.lite : C.dark, .88);
+    s += R(130, 240, 360, 220, C.dark) + R(138, 248, 344, 204, C.lite, .55);
+    for (const y of [318, 386]) s += R(138, y, 344, 6, C.near);
+    for (let rw = 0; rw < 3; rw++) for (let k = 0; k < 5; k++) {
+      const x = 170 + k * 68, y = 312 - rw * 0 + rw * 68 - (rw === 0 ? 0 : 0);
+      if (bread) s += `<ellipse cx="${x}" cy="${y - 10}" rx="26" ry="11" fill="${C.near}" opacity=".9"/><ellipse cx="${x}" cy="${y - 14}" rx="18" ry="5" fill="${C.far}" opacity=".7"/>`;
+      else s += Ci(x, y - 20, 17 + (k % 2) * 4, C.dark) + Ci(x, y - 20, 14 + (k % 2) * 4, C.lite, .9) + Ln(x, y - 20, x, y - 30, C.dark, 1.6) + Ln(x, y - 20, x + 7, y - 16, C.dark, 1.6);
+    }
+    s += R(512, 240, 150, 228, C.dark) + R(520, 248, 134, 148, C.lite, .35) + R(520, 398, 134, 62, C.near);
+    s += Ci(640, 340, 4, C.lite, .9);
+    s += Pe(586, 466, 2.2, C.dark, true);
+    s += R(90, 468, 620, 52, C.near) + R(90, 464, 620, 6, C.dark, .7);
+    s += Pa('M0 520V496H90V520Z', C.dark) + Pa('M710 520V500H800V520Z', C.dark);
+    s += Ln(160, 150, 160, 100, C.dark, 3) + `<rect x="130" y="84" width="62" height="28" fill="${C.dark}"/><circle cx="161" cy="98" r="9" fill="${C.lite}" opacity=".85"/>`;
+    return s;
+  },
+  bandstand(r, id) {
+    let s = skyBg(id, .5, .4) + clouds(r, 6, 20, 150) + hills(r, 340, C.haze, 30, .8);
+    for (const x of [30, 120, 700, 770]) s += Ci(x, 270, 60 + r() * 20, C.far) + R(x - 4, 300, 8, 80, C.far);
+    s += `<rect y="372" width="800" height="148" fill="url(#${id}f)"/>`;
+    s += R(220, 250, 360, 128, C.near) + Pa('M200 252L400 150L600 252Z', C.dark) + R(396, 130, 8, 28, C.dark) + Ci(400, 126, 6, C.dark);
+    for (let i = 0; i < 9; i++) s += R(232 + i * 42, 256, 6, 112, C.far, .85);
+    s += R(220, 340, 360, 8, C.dark) + R(200, 372, 400, 12, C.mid) + R(210, 384, 380, 6, C.dark, .5);
+    for (let i = 0; i < 10; i++) { const x = 258 + i * 32; s += Pe(x, 340, .9, C.dark, i % 3 === 0) + (i % 2 ? Ln(x + 6, 316, x + 20, 306, C.lite, 2.5, .8) : Ci(x + 8, 318, 5, C.lite, .8)); }
+    s += bunting(r, 0, 220, 196, 40, 9, C.near) + bunting(r, 580, 800, 196, 40, 9, C.near);
+    for (let row = 0; row < 4; row++) for (let k = 0; k < 11; k++) { const x = 40 + k * 70 + (row % 2) * 30 + r() * 8, y = 420 + row * 30; if (r() < .88) s += Pe(x, y, .7 + row * .16, C.dark, r() < .25) + R(x - 9, y - 8, 18, 3, C.near, .6); }
+    return s;
+  }
+};
+
+function sceneSVG(name, seed, opts) {
+  const id = 'sc' + Math.floor(Math.random() * 1e9).toString(36);
+  const fn = SCENES[name] || SCENES.street;
+  return `<svg viewBox="0 0 800 520" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">${fn(rng(seed || 1), id, opts || {})}</svg>`;
+}
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+/* ---------- The Westbridge Ledger: app ---------- */
+(function () {
+  'use strict';
+  const SKEL = '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>\n';
+  const TITLE = 'The Westbridge Ledger';
+  const FONTS = 'https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Archivo+Narrow:wght@500;600;700&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap';
+  const CATS = ['Noticias locales', 'Comunidad', 'Cultura', 'Economía', 'Investigaciones'];
+  const NAV = [['Inicio', 'all'], ['Noticias locales', 'Noticias locales'], ['Comunidad', 'Comunidad'], ['Cultura', 'Cultura'], ['Economía', 'Economía'], ['Investigaciones', 'Investigaciones'], ['Quiénes somos', 'about']];
+  const SCENE_LABELS = { hall: 'Ayuntamiento y plaza', bridge: 'Puente viejo', market: 'Plaza del mercado', street: 'Calle comercial', mill: 'El molino del río', shop: 'Relojería', bandstand: 'Templete de música' };
+  const SCENE_CAPS = { hall: 'La plaza del Ayuntamiento, el corazón de Westbridge.', bridge: 'El puente viejo sobre el río.', market: 'La plaza del mercado.', street: 'Una calle comercial del centro.', mill: 'El molino, junto al río.', shop: 'Una relojería de la ciudad.', bandstand: 'El templete de música del parque.' };
+
+  const root = document.getElementById('root');
+  const deskEl = document.getElementById('desk');
+  const data = JSON.parse(document.getElementById('site-data').textContent);
+  const st = { view: null, cat: 'all', canEdit: false, dirty: false, editingId: null, formImg: '', confirmDel: null, tab: 'arts' };
+  const $ = (s, r) => (r || document).querySelector(s);
+  const hash = s => Array.from(String(s)).reduce((a, c) => (a * 31 + c.charCodeAt(0)) | 0, 7);
+  const cap1 = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const fmt = (iso, o) => { try { return new Date(iso + 'T12:00:00Z').toLocaleDateString('es-ES', Object.assign({ timeZone: 'UTC' }, o)); } catch (e) { return iso || ''; } };
+  const longDate = iso => fmt(iso, { day: 'numeric', month: 'long', year: 'numeric' });
+  const shortDate = iso => fmt(iso, { day: 'numeric', month: 'short', year: 'numeric' });
+  const todayISO = () => new Date().toISOString().slice(0, 10);
+  const sorted = () => data.articles.slice().sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+  const reduced = () => window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function photoHTML(a, seedExtra) {
+    if (a.img && /^data:image\//.test(a.img)) return '<img src="' + esc(a.img) + '" alt="' + esc(a.caption || a.title || '') + '" loading="lazy">';
+    if (a.scene && a.scene !== 'none' && SCENES[a.scene]) return sceneSVG(a.scene, hash(a.id + (seedExtra || '')), {});
+    return '';
+  }
+  const hasPhoto = a => !!((a.img && /^data:image\//.test(a.img)) || (a.scene && a.scene !== 'none' && SCENES[a.scene]));
+  function bodyHTML(text) {
+    return String(text || '').split(/\n{2,}/).map(p => p.trim()).filter(Boolean).map(p =>
+      p.startsWith('> ') ? '<blockquote class="pull">' + esc(p.slice(2)) + '</blockquote>' : '<p>' + esc(p).replace(/\n/g, '<br>') + '</p>').join('');
+  }
+  function plate(a, cls, withCaption) {
+    const ph = photoHTML(a);
+    if (!ph) return '';
+    return '<figure class="plate ' + (cls || '') + '"><div class="frame"><div class="ph">' + ph + '</div></div>' +
+      (withCaption && (a.caption || a.credit) ? '<figcaption>' + esc(a.caption || '') + (a.credit ? '<span class="cr">' + esc(a.credit) + '</span>' : '') + '</figcaption>' : '') + '</figure>';
+  }
+
+  /* ---------- page sections ---------- */
+  function stripH(s) {
+    const d = s.editionDate ? longDate(s.editionDate) : new Date().toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    return '<div class="strip lbl"><span>' + esc(s.volume) + ', ' + esc(s.issue) + ' · Westbridge · ' + esc(cap1(d)) + '</span><span>' +
+      (st.canEdit ? '<button type="button" class="desk-open lbl" data-act="desk">Redacción · publicar</button>' : esc(s.motto)) + '</span></div>';
+  }
+  function mastH(s) {
+    return '<header><div class="mast"><div class="ear l lbl">Edición<b>' + esc(s.issue) + '</b>' + esc(s.volume) + '</div>' +
+      '<p class="nameplate">THE WESTBRIDGE LEDGER</p>' +
+      '<div class="ear r lbl">Redacción<b>Mill Street</b>Westbridge</div></div>' +
+      '<div class="tag"><p>' + esc(s.tagline) + '</p></div><div class="rule2"></div></header>';
+  }
+  function navH() {
+    return '<nav class="nav" aria-label="Secciones">' + NAV.map(n => {
+      const cur = (n[1] === st.cat) ? ' aria-current="true"' : '';
+      return '<button type="button" data-act="nav" data-cat="' + esc(n[1]) + '"' + cur + '>' + esc(n[0]) + '</button>';
+    }).join('') + '</nav>';
+  }
+  function storyH(a, s) {
+    const photo = hasPhoto(a);
+    const mail = 'mailto:?subject=' + encodeURIComponent(a.title) + '&body=' + encodeURIComponent('Te comparto esta noticia de The Westbridge Ledger: ' + a.title);
+    return '<article class="story" id="portada"><div class="story-kicker lbl">' +
+      (st.view && st.view !== featuredId() ? '<button type="button" class="back lbl" data-act="home">← Portada</button>' : '') +
+      (a.flash ? '<span class="stamp">Última hora</span>' : '') + '<span>' + esc(a.cat) + '</span><span>' + esc(longDate(a.date)) + '</span></div>' +
+      '<h1 class="story-h">' + esc(a.title) + '</h1>' +
+      '<div class="story-grid' + (photo ? '' : ' nophoto') + '">' + (photo ? plate(a, 'tilt-a', true) : '') +
+      '<aside class="story-side">' + (a.dek ? '<p class="dek">' + esc(a.dek) + '</p>' : '') +
+      '<p class="byline lbl"><span>Por <b>' + esc(a.author || 'La redacción') + '</b></span><span>' + esc(shortDate(a.date)) + '</span></p>' +
+      '<a class="share lbl" href="' + mail + '">Comparte la noticia por correo electrónico</a></aside></div>' +
+      '<div class="story-body">' + bodyHTML(a.body) + '</div></article>';
+  }
+  function emptyStory() {
+    return '<article class="story"><h1 class="story-h">Todavía no hay noticias</h1><p class="empty">La redacción está preparando la primera edición. Vuelve pronto.</p></article>';
+  }
+  function featuredId() { const a = sorted().find(x => x.featured) || sorted()[0]; return a && a.id; }
+  function latestH(arts, shownId) {
+    const list = arts.filter(a => st.cat === 'all' || st.cat === 'about' || a.cat === st.cat);
+    const label = (st.cat === 'all' || st.cat === 'about') ? 'Todas las secciones' : st.cat;
+    let h = '<section id="latest" aria-label="Últimas noticias"><div class="sec-h"><h2>Últimas noticias</h2><span class="lbl">' + esc(label) + '</span></div>';
+    if (!list.length) {
+      h += '<p class="empty">Todavía no hay noticias en ' + esc(label.toLowerCase()) + '. Si tienes una historia, escribe a la redacción.</p>';
+    } else {
+      h += '<ul class="list">' + list.map(a => {
+        const ph = photoHTML(a, 't');
+        return '<li class="item' + (ph ? '' : ' nothumb') + '">' + (ph ? '<figure class="plate"><div class="frame"><div class="ph">' + ph + '</div></div></figure>' : '') +
+          '<div><p class="meta lbl"><span class="cat">' + esc(a.cat) + '</span> · ' + esc(shortDate(a.date)) + ' · Por ' + esc(a.author || 'La redacción') + '</p>' +
+          '<h3><button type="button" data-act="open" data-id="' + esc(a.id) + '">' + esc(a.title) + '</button>' + (a.id === shownId ? '<span class="here">En portada</span>' : '') + '</h3>' +
+          (a.dek ? '<p class="sum">' + esc(a.dek) + '</p>' : '') + '</div></li>';
+      }).join('') + '</ul>';
+    }
+    return h + '</section>';
+  }
+  function noteH(s) {
+    if (!s.noteTitle && !s.noteText) return '<div></div>';
+    return '<aside class="note"><span class="lbl">Nota de la redacción</span><h3>' + esc(s.noteTitle) + '</h3><p>' + esc(s.noteText) + '</p></aside>';
+  }
+  function communityH(arts, s) {
+    const mine = arts.filter(a => a.cat === 'Comunidad');
+    let h = '<section class="community" id="comunidad" aria-label="Comunidad"><div class="sec-h"><h2>Comunidad</h2><span class="lbl">Eventos, vecinos e historias de Westbridge</span></div>';
+    if (mine.length) {
+      h += '<ul class="list">' + mine.map(a => '<li class="item nothumb"><div><p class="meta lbl"><span class="cat">Comunidad</span> · ' + esc(shortDate(a.date)) + ' · Por ' + esc(a.author || 'La redacción') + '</p><h3><button type="button" data-act="open" data-id="' + esc(a.id) + '">' + esc(a.title) + '</button></h3>' + (a.dek ? '<p class="sum">' + esc(a.dek) + '</p>' : '') + '</div></li>').join('') + '</ul>';
+    }
+    h += '<div class="board">' + (s.boardNotes || []).map(n => '<div class="pin">' + esc(n) + '</div>').join('') + '</div>';
+    h += '<p class="cap-note">Rincones de Westbridge · ilustraciones de archivo</p><div class="rincones">' +
+      [['bridge', 'El puente viejo'], ['market', 'La plaza del mercado'], ['bandstand', 'El templete'], ['mill', 'El molino del río']].map((x, i) =>
+        '<figure class="plate"><div class="frame"><div class="ph">' + sceneSVG(x[0], 40 + i * 7, {}) + '</div></div><figcaption>' + esc(x[1]) + '</figcaption></figure>').join('') + '</div></section>';
+    return h;
+  }
+  function aboutH(s) {
+    return '<section class="about" id="about" aria-label="Quiénes somos"><figure class="plate tilt-b"><div class="frame"><div class="ph">' + sceneSVG('street', 77, { label: 'LIBROS' }) +
+      '</div></div><figcaption>La redacción trabaja en el piso de arriba, sobre la librería.<span class="cr">Mill Street · ilustración de archivo</span></figcaption></figure>' +
+      '<div><span class="lbl" style="color:var(--accent)">Quiénes somos</span><h2>' + esc(s.aboutTitle) + '</h2><p>' + esc(s.aboutText) + '</p>' +
+      '<div class="contact"><span class="lbl">Escribe a la redacción</span><code id="mailtxt">' + esc(s.email) + '</code><button type="button" class="btn ghost sm" data-act="copy">Copiar</button> <a class="share lbl" href="mailto:' + esc(s.email) + '">Abrir correo</a></div></div></section>';
+  }
+  function footH(s) {
+    const y = (s.editionDate || todayISO()).slice(0, 4);
+    return '<footer class="foot lbl"><span>© ' + esc(y) + ' The Westbridge Ledger · ' + esc(s.address) + ' · ' + esc(s.motto) + '</span>' +
+      '<a href="mailto:?subject=' + encodeURIComponent('The Westbridge Ledger') + '&body=' + encodeURIComponent('Echa un vistazo a The Westbridge Ledger, el periódico independiente de Westbridge.') + '">Comparte el periódico por correo electrónico</a></footer>';
+  }
+
+  function render() {
+    const s = data.site, arts = sorted();
+    const shown = arts.find(a => a.id === st.view) || arts.find(a => a.featured) || arts[0] || null;
+    root.innerHTML = '<div class="wrap">' + stripH(s) + mastH(s) + navH() +
+      (shown ? storyH(shown, s) : emptyStory()) +
+      '<div class="lower">' + noteH(s) + latestH(arts, shown && shown.id) + '</div>' +
+      communityH(arts, s) + aboutH(s) + footH(s) + '</div>';
+  }
+  function scrollToId(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'start' }); }
+
+  root.addEventListener('click', e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const act = b.dataset.act;
+    if (act === 'nav') {
+      const c = b.dataset.cat;
+      if (c === 'about') { scrollToId('about'); return; }
+      st.cat = c; st.view = null; render();
+      if (c === 'all') window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' });
+      else if (c === 'Comunidad') scrollToId('comunidad'); else scrollToId('latest');
+    } else if (act === 'open') { st.view = b.dataset.id; render(); window.scrollTo({ top: 0, behavior: reduced() ? 'auto' : 'smooth' }); }
+    else if (act === 'home') { st.view = null; render(); window.scrollTo({ top: 0 }); }
+    else if (act === 'desk') openDesk();
+    else if (act === 'copy') {
+      const t = data.site.email, el = $('#mailtxt');
+      const sel = () => { if (el) { const r = document.createRange(); r.selectNodeContents(el); const g = getSelection(); g.removeAllRanges(); g.addRange(r); } };
+      try { navigator.clipboard.writeText(t).then(() => { b.textContent = 'Copiado'; }, sel); } catch (err) { sel(); }
+    }
+  });
+
+  /* ---------- editor desk ---------- */
+  function deskHTML() {
+    const opts = Object.keys(SCENE_LABELS).map(k => '<option value="' + k + '">' + esc(SCENE_LABELS[k]) + '</option>').join('') + '<option value="none">Sin ilustración</option>';
+    const cats = CATS.map(c => '<option>' + esc(c) + '</option>').join('');
+    return '<div class="wrap"><div class="desk-top"><h2>Redacción</h2><div class="desk-actions"><span id="pubmsg" role="status" aria-live="polite"></span>' +
+      '<button type="button" class="btn" id="d-pub">Publicar en la web</button><button type="button" class="btn ghost" id="d-close">Cerrar</button></div></div>' +
+      '<div class="dtabs"><button type="button" data-tab="arts" aria-pressed="true">Artículos</button><button type="button" data-tab="site" aria-pressed="false">Ajustes</button></div>' +
+      '<div class="dgrid" id="d-arts"><div><ul class="dlist" id="d-list"></ul><button type="button" class="btn ghost" id="d-new">+ Nuevo artículo</button></div>' +
+      '<form class="dform" id="d-form" autocomplete="off"><label>Titular<input type="text" id="d-title" required></label>' +
+      '<label>Entradilla<textarea id="d-dek" rows="2"></textarea></label>' +
+      '<label>Texto<textarea id="d-body" rows="12"></textarea><span class="help">Separa los párrafos con una línea en blanco. Empieza un párrafo con &gt; y se verá como cita destacada.</span></label>' +
+      '<div class="d2"><label>Sección<select id="d-cat">' + cats + '</select></label><label>Autor o autora<input type="text" id="d-author"></label><label>Fecha<input type="date" id="d-date"></label></div>' +
+      '<div class="d2"><label>Ilustración<select id="d-scene">' + opts + '</select></label><label>O sube tu foto (se verá en sepia)<input type="file" id="d-file" accept="image/*"></label></div>' +
+      '<div id="d-prev" class="prev" hidden><img id="d-prev-img" alt="Vista previa" style="width:100%;border:1px solid var(--ink);filter:var(--img-filter)"><button type="button" class="btn ghost sm" id="d-rmimg">Quitar mi foto</button></div>' +
+      '<div class="d2"><label>Pie de foto<input type="text" id="d-caption"></label><label>Crédito de la foto<input type="text" id="d-credit"></label></div>' +
+      '<label class="chk"><input type="checkbox" id="d-flash"> Mostrar el sello «Última hora»</label>' +
+      '<label class="chk"><input type="checkbox" id="d-featured"> Fijar en portada</label>' +
+      '<div class="drow"><button type="submit" class="btn">Guardar artículo</button><button type="button" class="btn ghost" id="d-cancel">Vaciar formulario</button></div>' +
+      '<span class="help">Guardar no publica: los cambios se ven aquí al momento y salen a la web cuando pulsas «Publicar en la web».</span></form></div>' +
+      '<form class="dform" id="d-site" hidden autocomplete="off"><div class="d2"><label>Volumen<input type="text" id="s-volume"></label><label>Número de edición<input type="text" id="s-issue"></label><label>Fecha de la edición<input type="date" id="s-editionDate"><span class="help">Déjala vacía para usar la fecha de hoy.</span></label></div>' +
+      '<label>Lema bajo el título<input type="text" id="s-tagline"></label><label>Frase final del pie<input type="text" id="s-motto"></label>' +
+      '<label>Título de la nota de la redacción<input type="text" id="s-noteTitle"></label><label>Texto de la nota<textarea id="s-noteText" rows="3"></textarea><span class="help">Vacía los dos campos para ocultar la nota.</span></label>' +
+      '<label>Título de «Quiénes somos»<input type="text" id="s-aboutTitle"></label><label>Texto de «Quiénes somos»<textarea id="s-aboutText" rows="3"></textarea></label>' +
+      '<label>Notas del tablón de Comunidad (una por línea)<textarea id="s-boardNotes" rows="4"></textarea></label>' +
+      '<div class="d2"><label>Correo de la redacción<input type="email" id="s-email"></label><label>Dirección<input type="text" id="s-address"></label></div>' +
+      '<div class="drow"><button type="submit" class="btn">Aplicar ajustes</button></div></form></div>';
+  }
+  const SF = ['volume', 'issue', 'editionDate', 'tagline', 'motto', 'noteTitle', 'noteText', 'aboutTitle', 'aboutText', 'email', 'address'];
+  function msg(t, err) { const m = $('#pubmsg'); if (m) { m.textContent = t; m.className = err ? 'err' : ''; } }
+  function dirtyMsg() { msg(st.dirty ? 'Hay cambios sin publicar.' : ''); }
+  function renderList() {
+    $('#d-list').innerHTML = sorted().map(a => '<li><b>' + esc(a.title || '(sin titular)') + '</b><span class="lbl" style="color:var(--ink-2)">' + esc(a.cat) + ' · ' + esc(shortDate(a.date)) + (a.featured ? ' · portada' : '') + '</span><div class="row">' +
+      '<button type="button" class="btn ghost sm" data-d="edit" data-id="' + esc(a.id) + '">Editar</button>' +
+      '<button type="button" class="btn ghost sm" data-d="del" data-id="' + esc(a.id) + '">' + (st.confirmDel === a.id ? '¿Seguro? Eliminar' : 'Eliminar') + '</button></div></li>').join('') || '<li><span class="help">Aún no hay artículos.</span></li>';
+  }
+  function setPrev() { const p = $('#d-prev'); if (st.formImg) { $('#d-prev-img').src = st.formImg; p.hidden = false; } else { p.hidden = true; } }
+  function fillForm(a) {
+    st.editingId = a ? a.id : null; st.formImg = a ? (a.img || '') : '';
+    $('#d-title').value = a ? a.title : ''; $('#d-dek').value = a ? a.dek : ''; $('#d-body').value = a ? a.body : '';
+    $('#d-cat').value = a ? a.cat : CATS[0]; $('#d-author').value = a ? a.author : 'La redacción'; $('#d-date').value = a ? a.date : todayISO();
+    $('#d-scene').value = a ? (a.scene || 'none') : 'hall'; $('#d-caption').value = a ? a.caption : ''; $('#d-credit').value = a ? a.credit : '';
+    $('#d-flash').checked = a ? !!a.flash : false; $('#d-featured').checked = a ? !!a.featured : false; $('#d-file').value = ''; setPrev();
+  }
+  function fillSite() { SF.forEach(k => { $('#s-' + k).value = data.site[k] || ''; }); $('#s-boardNotes').value = (data.site.boardNotes || []).join('\n'); }
+  function downscale(file) {
+    return new Promise((res, rej) => {
+      const fr = new FileReader();
+      fr.onerror = () => rej(new Error('lectura'));
+      fr.onload = () => { const im = new Image(); im.onerror = () => rej(new Error('imagen')); im.onload = () => {
+        const k = Math.min(1, 1400 / Math.max(im.width, im.height)), c = document.createElement('canvas');
+        c.width = Math.round(im.width * k); c.height = Math.round(im.height * k); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height);
+        res(c.toDataURL('image/jpeg', .8)); }; im.src = fr.result; };
+      fr.readAsDataURL(file);
+    });
+  }
+  function buildDesk() {
+    deskEl.innerHTML = deskHTML(); renderList(); fillForm(null); fillSite();
+    deskEl.addEventListener('click', e => {
+      const t = e.target.closest('button'); if (!t) return;
+      if (t.id === 'd-close') closeDesk();
+      else if (t.id === 'd-pub') publish();
+      else if (t.id === 'd-new' || t.id === 'd-cancel') fillForm(null);
+      else if (t.id === 'd-rmimg') { st.formImg = ''; $('#d-file').value = ''; setPrev(); }
+      else if (t.dataset.tab) { st.tab = t.dataset.tab; deskEl.querySelectorAll('.dtabs button').forEach(b => b.setAttribute('aria-pressed', String(b === t))); $('#d-arts').hidden = st.tab !== 'arts'; $('#d-site').hidden = st.tab !== 'site'; }
+      else if (t.dataset.d === 'edit') { const a = data.articles.find(x => x.id === t.dataset.id); if (a) { fillForm(a); $('#d-title').focus(); } }
+      else if (t.dataset.d === 'del') {
+        if (st.confirmDel === t.dataset.id) { data.articles = data.articles.filter(x => x.id !== t.dataset.id); st.confirmDel = null; if (st.editingId === t.dataset.id) fillForm(null); st.view = null; st.dirty = true; render(); renderList(); dirtyMsg(); }
+        else { st.confirmDel = t.dataset.id; renderList(); setTimeout(() => { if (st.confirmDel === t.dataset.id) { st.confirmDel = null; if ($('#d-list')) renderList(); } }, 4000); }
+      }
+    });
+    $('#d-file').addEventListener('change', async e => {
+      const f = e.target.files && e.target.files[0]; if (!f) return;
+      try { st.formImg = await downscale(f); setPrev(); msg('Foto lista.'); } catch (err) { msg('No he podido leer esa imagen. Prueba con un JPG o PNG.', true); }
+    });
+    $('#d-featured').addEventListener('change', () => {});
+    $('#d-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = $('#d-title').value.trim(); if (!title) { msg('Escribe un titular.', true); $('#d-title').focus(); return; }
+      const a = { id: st.editingId || ('a' + Date.now().toString(36)), title, dek: $('#d-dek').value.trim(), body: $('#d-body').value.trim(), cat: $('#d-cat').value, author: $('#d-author').value.trim() || 'La redacción',
+        date: $('#d-date').value || todayISO(), img: st.formImg, scene: $('#d-scene').value, caption: $('#d-caption').value.trim(), credit: $('#d-credit').value.trim(), flash: $('#d-flash').checked, featured: $('#d-featured').checked };
+      if (!a.caption && !a.img && a.scene !== 'none') a.caption = SCENE_CAPS[a.scene] || '';
+      if (a.featured) data.articles.forEach(x => { x.featured = false; });
+      const i = data.articles.findIndex(x => x.id === a.id);
+      if (i >= 0) data.articles[i] = a; else data.articles.push(a);
+      st.editingId = a.id; st.dirty = true; st.view = null; render(); renderList(); msg('Guardado. Falta publicar en la web.');
+    });
+    $('#d-site').addEventListener('submit', e => {
+      e.preventDefault();
+      SF.forEach(k => { data.site[k] = $('#s-' + k).value.trim(); });
+      data.site.boardNotes = $('#s-boardNotes').value.split('\n').map(x => x.trim()).filter(Boolean);
+      st.dirty = true; render(); msg('Ajustes aplicados. Falta publicar en la web.');
+    });
+    
+  }
+  const CODE_HASH = 'da800e7e96afee0fb1b8f519b73cf3f84b30a657d804b102d18fcfa2506a14bc';
+  let unlocked = false, built = false;
+  try { unlocked = sessionStorage.getItem('wbl-ok') === '1'; } catch (e) { /* no storage */ }
+  function sha(t) {
+    const K = [], H = [];
+    let pc = 0;
+    for (let c = 2; pc < 64; c++) { let p = true; for (let d = 2; d * d <= c; d++) if (c % d === 0) { p = false; break; } if (p) { if (pc < 8) H[pc] = (Math.pow(c, .5) * 4294967296) | 0; K[pc++] = (Math.pow(c, 1 / 3) * 4294967296) | 0; } }
+    const bytes = Array.from(unescape(encodeURIComponent('wbl:' + t))).map(ch => ch.charCodeAt(0));
+    const bitLen = bytes.length * 8;
+    bytes.push(0x80); while (bytes.length % 64 !== 56) bytes.push(0);
+    for (let i = 7; i >= 0; i--) bytes.push(i > 3 ? 0 : (bitLen >>> (i * 8)) & 255);
+    const rr = (x, n) => (x >>> n) | (x << (32 - n));
+    for (let o = 0; o < bytes.length; o += 64) {
+      const w = [];
+      for (let i = 0; i < 16; i++) w[i] = (bytes[o + 4 * i] << 24) | (bytes[o + 4 * i + 1] << 16) | (bytes[o + 4 * i + 2] << 8) | bytes[o + 4 * i + 3];
+      for (let i = 16; i < 64; i++) { const s0 = rr(w[i - 15], 7) ^ rr(w[i - 15], 18) ^ (w[i - 15] >>> 3), s1 = rr(w[i - 2], 17) ^ rr(w[i - 2], 19) ^ (w[i - 2] >>> 10); w[i] = (w[i - 16] + s0 + w[i - 7] + s1) | 0; }
+      let [a, b, c, d, e, f, g, h] = H;
+      for (let i = 0; i < 64; i++) {
+        const t1 = (h + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) | 0, t2 = ((rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+        h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+      }
+      H[0] = (H[0] + a) | 0; H[1] = (H[1] + b) | 0; H[2] = (H[2] + c) | 0; H[3] = (H[3] + d) | 0; H[4] = (H[4] + e) | 0; H[5] = (H[5] + f) | 0; H[6] = (H[6] + g) | 0; H[7] = (H[7] + h) | 0;
+    }
+    return H.map(x => (x >>> 0).toString(16).padStart(8, '0')).join('');
+  }
+  function gate() {
+    deskEl.innerHTML = '<div class="wrap"><form class="dform" id="g-form" autocomplete="off" style="max-width:24rem;margin:18vh auto 0"><h2 style="margin:0;font:400 2rem/1 var(--f-display)">Redacción</h2>' +
+      '<label>Código de redacción<input type="password" id="g-code" inputmode="numeric" autocomplete="off"></label><span class="help" id="g-msg" role="status"></span>' +
+      '<div class="drow"><button type="submit" class="btn">Entrar</button><button type="button" class="btn ghost" id="g-cancel">Cancelar</button></div></form></div>';
+    deskEl.hidden = false; document.body.style.overflow = 'hidden'; built = false;
+    $('#g-code').focus();
+    $('#g-cancel').addEventListener('click', closeDesk);
+    $('#g-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const m = $('#g-msg'); let ok = false;
+      try { ok = sha($('#g-code').value.trim()) === CODE_HASH; } catch (err) { m.textContent = 'Este navegador no puede comprobar el código.'; return; }
+      if (ok) { unlocked = true; try { sessionStorage.setItem('wbl-ok', '1'); } catch (err) { /* no storage */ } buildDesk(); built = true; dirtyMsg(); }
+      else { m.textContent = 'Código incorrecto.'; $('#g-code').value = ''; $('#g-code').focus(); }
+    });
+  }
+  function openDesk() {
+    if (!unlocked) { gate(); return; }
+    if (!built) { buildDesk(); built = true; }
+    deskEl.hidden = false; document.body.style.overflow = 'hidden'; dirtyMsg();
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !deskEl.hidden) closeDesk(); });
+  function closeDesk() { deskEl.hidden = true; document.body.style.overflow = ''; }
+
+  /* ---------- publishing: the page regenerates itself ---------- */
+  function serialize() {
+    const json = JSON.stringify(data).replace(/</g, '\\u003c').split(String.fromCharCode(8232)).join('\\u2028').split(String.fromCharCode(8233)).join('\\u2029');
+    return SKEL + '<title>' + TITLE + '</title>\n<link rel="stylesheet" href="' + FONTS + '">\n<style id="app-css">' + document.getElementById('app-css').textContent + '</style>\n' +
+      '<div id="root"></div>\n<div id="desk" class="desk" hidden></div>\n<script type="application/json" id="site-data">' + json + '<\/script>\n<script id="app-js">' + document.getElementById('app-js').textContent + '<\/script></body></html>';
+  }
+  async function publish() {
+    const btn = $('#d-pub'); btn.disabled = true; msg('Publicando…');
+    try {
+      const art = await window.claude.use('artifact');
+      if (!art) { msg('Publicar no está disponible en esta vista.', true); btn.disabled = false; return; }
+      st.dirty = false;
+      await art.publish(serialize());
+      msg('Publicado. Recargando la web…');
+    } catch (e) {
+      st.dirty = true; btn.disabled = false;
+      const c = e && e.code;
+      if (c === 'conflict') msg('Alguien publicó antes que tú. La página se recargará con su versión; vuelve a aplicar tus cambios.', true);
+      else if (c === 'not_writer' || c === 'not_granted' || c === 'capability_disabled') msg('Esta cuenta no puede publicar cambios en la web.', true);
+      else if (c === 'too_large') msg('La página es demasiado grande. Quita alguna foto o usa fotos más pequeñas.', true);
+      else if (c === 'rate_limited') msg('Demasiadas publicaciones seguidas. Espera un momento y prueba otra vez.', true);
+      else msg('No se ha podido publicar. Inténtalo de nuevo en unos segundos.', true);
+    }
+  }
+
+  render();
+  (async function () {
+    try {
+      if (!window.claude || !window.claude.use) return;
+      const u = await window.claude.use('user');
+      if (u && await u.isOwner() && await u.canEdit()) { st.canEdit = true; render(); }
+    } catch (e) { /* read-only view */ }
+  })();
+})();
+</script>
+</body></html>
